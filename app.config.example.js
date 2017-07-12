@@ -18,10 +18,9 @@ const redditCredentials = {
 
 
 const targetDomains = [
-    "www.asdasd.com"
+    "www.clarin.com",
+    "www.infobae.com"
 ]
-
-
 
 
 module.exports = { redditCredentials, targetDomains }

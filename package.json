@@ -3,13 +3,12 @@
   "version": "0.1.0",
   "main": "/src/index.js",
   "dependencies": {
-    "electron": "^1.6.11",
     "snoowrap": "^1.14.1"
   },
   "scripts": {
     "build": "webpack --progress --colors",
     "test": "asd",
-    "run": "node build/index.js",
+    "start": "node src/index.js",
     "predeploy": "npm run test && npm run build",
     "deploy": "asd"
   },

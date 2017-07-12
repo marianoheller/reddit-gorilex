@@ -11024,7 +11024,14 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
 const { getTargets } = __webpack_require__( 149 );
 
 
-getTargets();
+getTargets()
+.then( (targets) => {
+    console.log(targets);
+})
+.catch( (e) => {
+    console.log(e)
+    throw new Error(e)
+} );
 
 /***/ }),
 /* 149 */
@@ -11040,24 +11047,32 @@ const { URL } = __webpack_require__(76);
 const getTargets = function f_getTargets() {
     const r = new snoowrap( redditCredentials );
 
-    // Printing a list of the titles on the front page
-    let target = null;
-    r.getSubreddit('argentina').getNew().map(post => post)
-    .then( (posts) => {
-        console.log( posts.map( (post, index) => {
-            const url = new URL(post.url);
-            return `${index}) ${post.id} | ${post.title} | ${url.host}`
-        }) );
-        const targetPosts = posts.filter( (post) => {
+    const getBotComments = r.getUser(redditCredentials.username).getComments();
+    const getUltimosPosts = r.getSubreddit('argentina').getNew();
+
+    return Promise.all( [getUltimosPosts, getBotComments] )
+    .then( ([posts, comments]) => {
+
+        const possibleTargets = posts.filter( (post) => {
             const url = new URL(post.url);
             return targetDomains.includes(url.host);
         })
-        console.log("------------");
-        console.log( targetPosts.map( (post, index) => {
+        // console.log("=================");
+        // console.log("All Targets")
+        // console.log( possibleTargets.map( (post, index) => {
+        //     const url = new URL(post.url);
+        //     return `${post.id} | ${post.title} | ${url.host}`
+        // }) );
+        
+        // console.log("=================");
+        // console.log("Current Targets");
+        // console.log(comments.map( comment => comment.link_url));
+        return possibleTargets.map( (post, index) => {
             const url = new URL(post.url);
-            return `${index}) ${post.id} | ${post.title} | ${url.host}`
-        }) );
+            return url.href;
+        });
     } )
+    .catch( (e) => console.log(e) )
 }
 
 module.exports = { getTargets }
@@ -28586,8 +28601,18 @@ const redditCredentials = {
     password: 'zxcvbnmqp1'
 };
 
+// OR
+//
+// const redditCredentials = {
+//     userAgent: 'put your user-agent string here',
+//     clientId: 'put your client id here',
+//     clientSecret: 'put your client secret here',
+//     refreshToken: 'put your refresh token here'
+// }
+
+
 const targetDomains = [
-    "www.lanacion.com.ar"
+    "www.clarin.com"
 ]
 
 

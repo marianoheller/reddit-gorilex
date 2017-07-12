@@ -10,23 +10,27 @@ const getTargets = function f_getTargets() {
     const getBotComments = r.getUser(redditCredentials.username).getComments();
     const getUltimosPosts = r.getSubreddit('argentina').getNew();
 
-    Promise.all( [getUltimosPosts, getBotComments] )
+    return Promise.all( [getUltimosPosts, getBotComments] )
     .then( ([posts, comments]) => {
 
         const possibleTargets = posts.filter( (post) => {
             const url = new URL(post.url);
             return targetDomains.includes(url.host);
         })
-        console.log("=================");
-        console.log("All Targets")
-        console.log( possibleTargets.map( (post, index) => {
-            const url = new URL(post.url);
-            return `${post.id} | ${post.title} | ${url.host}`
-        }) );
+        // console.log("=================");
+        // console.log("All Targets")
+        // console.log( possibleTargets.map( (post, index) => {
+        //     const url = new URL(post.url);
+        //     return `${post.id} | ${post.title} | ${url.host}`
+        // }) );
         
-        console.log("=================");
-        console.log("Current Targets");
-        console.log(comments.map( comment => comment.link_url));
+        // console.log("=================");
+        // console.log("Current Targets");
+        // console.log(comments.map( comment => comment.link_url));
+        return possibleTargets.map( (post, index) => {
+            const url = new URL(post.url);
+            return url.href;
+        });
     } )
     .catch( (e) => console.log(e) )
 }

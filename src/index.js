@@ -6,7 +6,7 @@ const { getComments } = require('./crawler');
 
 
 
-
+/* 
 var job = new CronJob({
   cronTime: '00 * * * * *',
   onTick: reComment,
@@ -15,8 +15,8 @@ var job = new CronJob({
 });
 job.start();
 
-
-
+ */
+reComment();
 
 
 function reComment() {
@@ -29,7 +29,7 @@ function reComment() {
   .then( (targets) => getComments(targets) )
   .then( (comments) => {
       const comment = comments[Math.floor( Math.random() * comments.length)];
-      postComments( [comment] );
+      //postComments( [comment] );
   } )
   .catch( (e) => {
       console.log(e);

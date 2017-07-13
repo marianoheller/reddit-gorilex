@@ -18,7 +18,7 @@ const getTargets = function _getTargets() {
 
     return Promise.all( [getUltimosPosts, getBotComments] )
     .then( ([posts, comments]) => {
-        console.log(`> Got posts (${posts.length})`)
+        console.log(`> Got posts (${posts.length})`);
 
         //Filtro los dominios no designados
         const possibleTargets = posts.filter( (post) => {
@@ -64,11 +64,11 @@ const postComments = function _postComments(comments) {
             return target.reply(comment.comment);
         } )
     })
-    .then( (replies) => {
+    /* .then( (replies) => {
         replies.forEach( (reply) => {
             console.log(reply);
         });
-    })
+    }) */
     .catch( (e) => {
         throw new Error(e);
     })

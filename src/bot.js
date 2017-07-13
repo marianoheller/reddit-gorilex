@@ -64,7 +64,11 @@ const postComments = function _postComments(comments) {
             return target.reply(comment.comment);
         } )
     })
-    .then(console.log)
+    .then( (replies) => {
+        replies.forEach( (reply) => {
+            console.log(reply);
+        });
+    })
     .catch( (e) => {
         throw new Error(e);
     })

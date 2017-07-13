@@ -1,15 +1,17 @@
 //import myCrawler from './main'
-const { getTargets } = require('./redditBot');
+const { getTargets, postComments } = require('./bot');
 const { getComments } = require('./crawler');
+
+console.log(" ");
+console.log("Initializing gorilex...");
 
 
 getTargets()
-.then( (targets) => {
-    if ( !targets.length ) {   throw new Error("No targets!");   }
-    console.log(targets);
-    const comments = getComments(targets);
-})
+.then( (targets) => getComments(targets) )
+.then( (comments) => {
+    const comment = comments[Math.floor( Math.random() * comments.length)];
+    postComments(comment);
+} )
 .catch( (e) => {
-    console.log(e)
-    throw new Error(e)
+    console.log(e);
 } );

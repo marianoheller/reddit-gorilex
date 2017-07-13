@@ -18,9 +18,12 @@ const redditCredentials = {
 
 
 const targetDomains = [
-    "www.clarin.com",
-    "www.infobae.com"
+    "www.lanacion.com.ar"
 ]
 
+const targetSubreddit = "argentina";
 
-module.exports = { redditCredentials, targetDomains }
+
+
+
+module.exports = { redditCredentials, targetDomains, targetSubreddit }

@@ -1,75 +1,51 @@
-try {
-    var Spooky = require('spooky');
-} catch (e) {
-    var Spooky = require('../lib/spooky');
+var webdriver = require('selenium-webdriver'),
+    By = webdriver.By,
+    until = webdriver.until;
+
+
+function extractComments(link) {
+
+    var driver = new webdriver.Builder()
+        .forBrowser('phantomjs')
+        .build();
+
+    driver.get(link);
+    
+    return driver.findElement(By.id('livefyre')).getLocation()
+    .then( ( { x, y }) => {
+        return driver.executeScript(`window.scrollTo(${x},${y})`)
+    })
+    .then ( () => {
+        return driver.wait(until.elementLocated( By.className('fyre-comment-body') ), 15000);
+    })
+    .then( (comment) => {
+        return comment.getText();
+    })
+    .catch( (e) => {
+        throw new Error(e);
+    })
 }
+
 
 
 const getComments = function _getComments( targets ) {
-    extractComment(targets);    
-    return targets;
+    console.log("Getting comments...");
+    console.log(" ");
+
+    const commentsPromises = targets.map( (targetUrl) => extractComments(targetUrl) );
+    return Promise.all( commentsPromises )
+    .then( (comments) => {
+        return comments.map( (comment, index) => {
+            return {
+                comment: comment,
+                url: targets[index],
+            }
+        })
+    } )
+    .catch( (e) => {
+        throw new Error(e)
+    });
 }
-
-
-
-function extractComment( links ) {
-    var spooky = new Spooky({
-        child: {
-            transport: 'http'
-        },
-        casper: {
-            logLevel: 'debug',
-            verbose: true
-        }
-    }, function (err) {
-        if (err) {
-            e = new Error('Failed to initialize SpookyJS');
-            e.details = err;
-            throw e;
-        }
-
-        links.forEach( (link) =>  spooky.start(link) );
-
-        spooky.then(function () {
-            this.emit('title', this.evaluate(function () {
-                return document.title;
-            }));
-        });
-
-        spooky.run(function() {
-            this.echo('So the whole suite ended.');
-            this.exit(); // <--- don't forget me!
-        });
-    });
-
-    spooky.on('error', function (e, stack) {
-        console.error(e);
-
-        if (stack) {
-            console.log(stack);
-        }
-    });
-
-
-    spooky.on('title', function (greeting) {
-        console.log(greeting);
-    });
-
-    spooky.on('log', function (log) {
-        if (log.space === 'remote') {
-            console.log(log.message.replace(/ \- .*/, ''));
-        }
-    });
-
-    /*// Uncomment this block to see all of the things Casper has to say.
-    // There are a lot.
-    // He has opinions.
-    spooky.on('console', function (line) {
-        console.log(line);
-    });*/
-
-}
-
 
 
 module.exports = { getComments }

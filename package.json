@@ -1,11 +1,10 @@
 {
-  "name": "your-app",
+  "name": "gorilex-arg",
   "version": "0.1.0",
   "main": "/src/index.js",
   "dependencies": {
-    "casperjs": "^1.1.4",
-    "snoowrap": "^1.14.1",
-    "spooky": "^0.2.5"
+    "selenium-webdriver": "^3.4.0",
+    "snoowrap": "^1.14.1"
   },
   "scripts": {
     "build": "webpack --progress --colors",

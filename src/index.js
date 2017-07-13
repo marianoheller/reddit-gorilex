@@ -15,3 +15,25 @@ getTargets()
 .catch( (e) => {
     console.log(e);
 } );
+
+
+
+/*
+
+
+var CronJob = require('cron').CronJob;
+
+
+var job = new CronJob({
+  cronTime: '00 * * * * *',
+  onTick: function() {
+    const now = new Date();
+    console.log( now.getSeconds() );
+  },
+  start: true,
+  timeZone: 'America/Argentina/Buenos_Aires'
+});
+job.start();
+
+
+*/

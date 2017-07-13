@@ -7,6 +7,10 @@ const { URL } = require('url');
 const getTargets = function _getTargets() {
     console.log("Getting targets...");
     console.log(" ");
+    if ( !redditCredentials ) {   throw new Error("Credentials not found.")   }
+    if ( !targetDomains ) {   throw new Error("Target domains not found.")   }
+    if ( !targetSubreddit ) {   throw new Error("Target subreddit not found.")   }
+
     const r = new snoowrap( redditCredentials );
 
     const getBotComments = r.getUser(redditCredentials.username).getComments();

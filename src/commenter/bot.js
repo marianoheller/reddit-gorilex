@@ -1,15 +1,13 @@
 'use strict';
 const snoowrap = require('snoowrap');
-const { redditCredentials, targetDomains, targetSubreddit } = require('./commenter.config');
+const { commenter} = require('../../app.config');
 const { URL } = require('url');
 
 
 const getTargets = function _getTargets() {
     console.log("Getting targets...");
     console.log(" ");
-    if ( !redditCredentials ) {   throw new Error("Credentials not found.")   }
-    if ( !targetDomains ) {   throw new Error("Target domains not found.")   }
-    if ( !targetSubreddit ) {   throw new Error("Target subreddit not found.")   }
+    const { redditCredentials, targetDomains, targetSubreddit } = commenter;
 
     const r = new snoowrap( redditCredentials );
 
@@ -52,6 +50,7 @@ const getTargets = function _getTargets() {
 
 
 const postComments = function _postComments(comments) {
+    const { redditCredentials, targetSubreddit } = commenter;
 
     if ( !comments.length ) {
         console.log("Got no comments.\n");

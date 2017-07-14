@@ -9,13 +9,11 @@ const getComments = function _getComments( targets ) {
     const commentsPromises = targets.map( (targetUrl) => getCommentByDomain(targetUrl) );
     return Promise.all( commentsPromises )
     .then( (comments) => {
-        return comments.map( (comment, index) => {
-            console.log(`> ${comment}`)
-            return {
-                comment: comment,
-                url: targets[index],
-            }
-        })
+        //Antes de mapear, filtro los comments null (xq no se encontró el elemento en el scraper)
+        return comments.filter( (c) => c ).map( (commentObj, index) => {
+            console.log(`> ${commentObj.comment}`)
+            return commentObj;
+        });
     } )
     .catch( (e) => {
         throw new Error(e)

@@ -42,8 +42,17 @@ function laNacionGetter(link) {
     .then ( () => {
         return driver.wait(until.elementLocated( By.className('fyre-comment-body') ), 15000);
     })
-    .then( (comment) => {
-        return comment.getText();
+    .then( (commentObj) => {
+        return commentObj.getText()
+    }, (e) => {
+        return null;
+    })
+    .then( (commentText) => {
+        if ( !commentText ) {   return commentText;   }
+        return {
+            comment: commentText,
+            url: link,
+        }
     })
     .catch( (e) => {
         throw new Error(e);

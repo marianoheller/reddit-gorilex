@@ -1,6 +1,6 @@
 'use strict';
 const snoowrap = require('snoowrap');
-const { redditCredentials, targetDomains, targetSubreddit } = require('../app.config');
+const { redditCredentials, targetDomains, targetSubreddit } = require('./commenter.config');
 const { URL } = require('url');
 
 
@@ -25,7 +25,7 @@ const getTargets = function _getTargets() {
             const url = new URL(post.url);
             return targetDomains.includes(url.host);
         });
-        console.log(`> Got possible targets (${possibleTargets.length})`)
+        console.log(`> Filtered by domain. Got possible targets (${possibleTargets.length})`)
         
         //Filtro los targets ya comentados
         const commentsUrls = comments.map( (comment) => comment.link_url );
@@ -33,16 +33,17 @@ const getTargets = function _getTargets() {
             return !commentsUrls.includes(post.url);
         })
         console.log(`> Got already made comments (${comments.length})`)
-        console.log(`> Got targets (${targets.length})`);
+        console.log(`> Filtered by already commented. Got targets (${targets.length})`);
         console.log(" ");
         
-        if ( !targets.length ) {   throw new Error( "No targets! Targets array empty" );   }
+        if ( !targets.length ) {   throw "> No targets! Targets array empty.\n";   }
         return targets.map( (post, index) => {
             const url = new URL(post.url);
             return url.href;
         });
     } )
     .catch( (e) => {
+        if ( typeof(e)==="string" ) {   throw e;   }
         throw new Error(e);
     } )
 }
@@ -52,7 +53,11 @@ const getTargets = function _getTargets() {
 
 const postComments = function _postComments(comments) {
 
-    console.log(comments);
+    if ( !comments.length ) {
+        console.log("Got no comments.\n");
+        return;
+    }
+
     const r = new snoowrap( redditCredentials );
 
     r.getSubreddit(targetSubreddit).getNew()
@@ -64,11 +69,13 @@ const postComments = function _postComments(comments) {
             return target.reply(comment.comment);
         } )
     })
-    /* .then( (replies) => {
-        replies.forEach( (reply) => {
+    .then( (replies) => {
+        /*replies.forEach( (reply) => {
             console.log(reply);
-        });
-    }) */
+        });*/
+        console.log(" ");
+        console.log("Replied succesfully!\n");
+    }) 
     .catch( (e) => {
         throw new Error(e);
     })

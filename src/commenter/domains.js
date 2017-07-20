@@ -12,6 +12,14 @@ const getters = [
     {
         hostname: "www.clarin.com",
         getter: clarinGetter
+    },
+    {
+        hostname: "www.infobae.com",
+        getter: infobaeGetter
+    },
+    {
+        hostname: "www.ambito.com",
+        getter: ambitoGetter
     }
 ]
 
@@ -59,13 +67,73 @@ function laNacionGetter(link) {
     })
 }
 
+
+function infobaeGetter(link) {
+    var driver = new webdriver.Builder()
+        .forBrowser('phantomjs')
+        .build();
+
+    driver.get(link);
+    
+    return driver.wait(until.elementLocated( By.xpath("//*[@title='Facebook Social Plugin']") ), 15000)
+    .then( (commentObj) => {
+        return commentObj.getAttribute("src");
+    })
+    .then( (facebookUrl) => {
+        return driver.navigate().to(facebookUrl);
+    })
+    .then( () => {
+        return driver.wait(until.elementLocated( By.xpath("//*[@class='_5mdd']/span") ), 5000)
+    })
+    .then( (commentObj) => {
+        return commentObj.getText()
+    }, (e) => {
+        return null;
+    })
+    .then( (commentText) => {
+        if ( !commentText ) {   return commentText;   }
+        return {
+            comment: commentText,
+            url: link,
+        }
+    })
+    .catch( (e) => {
+        throw new Error(e);
+    })
+}
+
+function ambitoGetter(link) {
+     var driver = new webdriver.Builder()
+        .forBrowser('phantomjs')
+        .build();
+
+    driver.get(link);
+
+    return driver.wait(until.elementLocated( By.xpath("//div[@id='divComentarios']/div[@class='row']/article/p") ), 15000)
+    .then( (commentObj) => {
+        return commentObj.getText()
+    }, (e) => {
+        return null;
+    })
+    .then( (commentText) => {
+        if ( !commentText ) {   return commentText;   }
+        return {
+            comment: commentText,
+            url: link,
+        }
+    })
+    .catch( (e) => {
+        throw new Error(e);
+    })
+}
+
 function clarinGetter(link) {
     var driver = new webdriver.Builder()
         .forBrowser('phantomjs')
         .build();
 
     driver.get(link);
-    throw new Error("CLARIN NO!!");
+    throw new Error("CLARIN NOT IMPLEMENTED!!");
 }
 
 

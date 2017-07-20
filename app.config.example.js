@@ -9,7 +9,9 @@ module.exports = {
             password: 'put your password here'
         },
         targetDomains: [
-            "www.lanacion.com.ar"
+            "www.lanacion.com.ar",
+            "www.infobae.com",
+            "www.ambito.com",
         ],
         targetSubreddit: "argentina",
     }

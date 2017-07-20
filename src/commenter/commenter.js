@@ -14,10 +14,7 @@ const reComment = function _reComment() {
 
   getTargets()
   .then( (targets) => getComments(targets) )
-  .then( (comments) => {
-      //const comment = comments[Math.floor( Math.random() * comments.length)];
-      postComments( comments );
-  } )
+  //.then( (comments) => postComments( comments ) )
   .catch( (e) => {
       console.log(e);
   } );

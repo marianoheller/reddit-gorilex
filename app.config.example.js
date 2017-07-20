@@ -12,6 +12,7 @@ module.exports = {
             "www.lanacion.com.ar",
             "www.infobae.com",
             "www.ambito.com",
+            "www.clarin.com",
         ],
         targetSubreddit: "argentina",
     }

@@ -56,6 +56,7 @@ function laNacionGetter(link) {
         return null;
     })
     .then( (commentText) => {
+        driver.quit();
         if ( !commentText ) {   return commentText;   }
         return {
             comment: commentText,
@@ -91,6 +92,7 @@ function infobaeGetter(link) {
         return null;
     })
     .then( (commentText) => {
+        driver.quit();
         if ( !commentText ) {   return commentText;   }
         return {
             comment: commentText,
@@ -116,6 +118,7 @@ function ambitoGetter(link) {
         return null;
     })
     .then( (commentText) => {
+        driver.quit();
         if ( !commentText ) {   return commentText;   }
         return {
             comment: commentText,
@@ -133,7 +136,32 @@ function clarinGetter(link) {
         .build();
 
     driver.get(link);
-    throw new Error("CLARIN NOT IMPLEMENTED!!");
+    
+
+    return driver.findElement(By.id('activateComments'))
+    .then( ( activateComments ) => {
+        return driver.actions().mouseMove( activateComments ).click().perform();
+    })
+    .then( () => {
+        return driver.wait(until.elementLocated( By.className('gig-comment-body') ), 20000);
+    })
+    .then( (commentObj) => {
+        return commentObj.getText()
+    }, (e) => {
+        console.log("Error: ", e);
+        return null;
+    })
+    .then( (commentText) => {
+        driver.quit();
+        if ( !commentText ) {   return commentText;   }
+        return {
+            comment: commentText,
+            url: link,
+        }
+    })
+    .catch( (e) => {
+        throw new Error(e);
+    })
 }
 
 

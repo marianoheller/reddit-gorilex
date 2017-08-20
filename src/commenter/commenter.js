@@ -27,6 +27,7 @@ function checkConfigFile() {
     if ( !redditCredentials ) {   throw new Error("Credentials not found.")   }
     if ( !targetDomains ) {   throw new Error("Target domains not found.")   }
     if ( !targetSubreddit ) {   throw new Error("Target subreddit not found.")   }
+    console.log("Config files OK");
 }
 
 

@@ -1,6 +1,7 @@
 // server.js
 // where your node app starts
-var { reComment } = require('.src/commenter/commenter');
+require('dotenv').config();
+var { reComment } = require('./src/commenter/commenter');
 // init project
 var express = require('express');
 var app = express();

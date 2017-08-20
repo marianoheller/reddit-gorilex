@@ -3,7 +3,7 @@ var { reComment } = require('./commenter/commenter');
 
 
 console.log("Running script...\n");
-
+/* 
 var commenterTask = new CronJob({
   cronTime: '0 * * * * *',
   onTick: reComment,
@@ -11,6 +11,6 @@ var commenterTask = new CronJob({
   timeZone: 'America/Argentina/Buenos_Aires'
 });
 
-commenterTask.start();
+commenterTask.start(); */
  
-//reComment();
+reComment();

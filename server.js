@@ -2,7 +2,6 @@
 // where your node app starts
 require('dotenv').config();
 const { reComment } = require('./src/commenter/commenter');
-// init project
 const express = require('express');
 const app = express();
 
